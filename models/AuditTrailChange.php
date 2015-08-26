@@ -11,7 +11,7 @@ use Yii;
  * @var string $new_value
  * @var string $old_value
  */
-class AuditTrailChange extends AuditTrailModel
+class AuditTrailChange extends AuditTrailRecord
 {
 	/**
 	 * @return string the associated database table name

@@ -13,7 +13,7 @@ use Yii;
  * @var integer $user_id
  * @var string $model_id
  */
-class AuditTrail extends AuditTrailModel
+class AuditTrail extends AuditTrailRecord
 {
 	/**
 	 * @return string the associated database table name
