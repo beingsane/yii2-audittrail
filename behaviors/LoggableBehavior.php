@@ -100,7 +100,7 @@ class LoggableBehavior extends Behavior
 
         // If this is a new record lets add a CREATE notification
         $action = $insert ? 'CREATE' : 'CHANGE';
-        $this->auditAttributes($action, $newattributes);
+        $this->auditAttributes($action, $newattributes, $oldattributes);
 
         // Reset old attributes to handle the case with the same model instance updated multiple times
         $this->setOldAttributes($this->owner->getAttributes());
@@ -126,12 +126,14 @@ class LoggableBehavior extends Behavior
 
     protected function leaveTrail($action)
     {
-        $log = new AuditTrail();
-        $log->action = $action;
-        $log->model = $this->owner->className(); // Gets a plain text version of the model name
-        $log->model_id = (string) $this->getNormalizedPk();
-        $log->stamp = $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
-        $log->user_id = (string) $this->getUserId(); // Lets get the user id
+        $stamp = $this->storeTimestamp ? time() : date($this->dateFormat); // If we are storing a timestamp lets get one else lets get the date
+        $log = new AuditTrail([
+            'action' => $action,
+            'model' => $this->owner->className(),
+            'model_id' => (string) $this->getNormalizedPk(),
+            'stamp' => $stamp,
+            'user_id' => (string) $this->getUserId(), // Lets get the user id
+        ]);
         if ($log->save()) {
             return $log;
         }
