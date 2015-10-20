@@ -57,6 +57,10 @@ class AuditTrail extends AuditTrailRecord
     {
         $query->orderBy(['[[stamp]]' => SORT_DESC]);
     }
+    
+    public function changes() {
+        return $this->hasMany(AuditTrailChange::className(), ['audit_id' => 'id']);
+    }
 
     public function getUser()
     {
